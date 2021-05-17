@@ -11,6 +11,7 @@ var port = process.env.PORT || 3000;
 // so that your API is remotely testable by FCC
 var cors = require('cors');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
+
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // http://expressjs.com/en/starter/static-files.html
@@ -53,8 +54,7 @@ app.get("/api/whoami", function (req, res) {
 var Schema = mongoose.Schema;
 var UrlData = mongoose.model("UrlData", new Schema({
   original_url: String,
-  short_url: String,
-  short_id: String
+  short_url: String
 }));
 
 var shortId;
@@ -93,7 +93,7 @@ app.post("/api/shorturl", function (req, res) {
 
 app.get("/api/shorturl/:short_code", function (req, res) {
   let shortUrl = req.params.short_code;
-  UrlData.findOne({ short_id: shortUrl }, function (err, data) {
+  UrlData.findOne({ short_url: shortUrl }, function (err, data) {
     if (err) return console.error(err);
     if (data.original_url.match(/http/ig)) {
       return res.status(301).redirect(data.original_url);
