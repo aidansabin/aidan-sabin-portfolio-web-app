@@ -7,12 +7,11 @@ var dns = require('dns');
 var app = express();
 var port = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
 var cors = require('cors');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -76,8 +75,7 @@ app.post("/api/shorturl", function (req, res) {
   });
   let newUrl = new UrlData({
     original_url: url,
-    short_url: __dirname + "/api/shorturl/" + shortId,
-    short_id: shortId
+    short_url: shortId,
   });
   UrlData.findOne({ original_url: newUrl.original_url })
   .exec(function (err, data) {
