@@ -60,7 +60,7 @@ var UrlData = mongoose.model("UrlData", new Schema({
 var shortId;
 UrlData.countDocuments({}, function (err, num) {
   if (err) return console.error(err);
-  shortId = num + 1;
+  return shortId = num + 1;
 });
 
 app.use(bodyParser.urlencoded());
@@ -68,7 +68,7 @@ app.post("/api/shorturl", function (req, res) {
   let url = req.body.url;
   dns.lookup(url, function (err, address) {
     if (err) {
-      res.json({
+      return res.json({
         error: "invalid url"
       });
     }
@@ -81,11 +81,11 @@ app.post("/api/shorturl", function (req, res) {
   .exec(function (err, data) {
     if (err) return console.error(err);
     if (data !== null) {
-      res.json({ original_url: data.original_url, short_url: data.short_url });
+      return res.json({ original_url: data.original_url, short_url: data.short_url });
     } else {
       shortId++;
       newUrl.save();
-      res.json({ original_url: newUrl.original_url, short_url: newUrl.short_url });
+      return res.json({ original_url: newUrl.original_url, short_url: newUrl.short_url });
     }
   })
 });
@@ -95,9 +95,9 @@ app.get("/api/shorturl/:short_code", function (req, res) {
   UrlData.findOne({ short_id: shortUrl }, function (err, data) {
     if (err) return console.error(err);
     if (data.original_url.match(/http/ig)) {
-      res.status(301).redirect(data.original_url);
+      return res.status(301).redirect(data.original_url);
     } else {
-      res.status(301).redirect("https://" + data.original_url);
+      return res.status(301).redirect("https://" + data.original_url);
     }
   })
 });
