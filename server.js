@@ -60,7 +60,8 @@ var UrlData = mongoose.model("UrlData", new Schema({
 var shortId;
 UrlData.countDocuments({}, function (err, num) {
   if (err) return console.error(err);
-  return shortId = num + 1;
+  short = num + 1;
+  return shortId;
 });
 
 app.use(bodyParser.urlencoded());
