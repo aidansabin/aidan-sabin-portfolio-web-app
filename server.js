@@ -60,13 +60,21 @@ var UrlData = mongoose.model("UrlData", new Schema({
 var shortId;
 UrlData.countDocuments({}, function (err, num) {
   if (err) return console.error(err);
-  short = num + 1;
+  shortId = num + 1;
   return shortId;
 });
 
 app.use(bodyParser.urlencoded());
 app.post("/api/shorturl", function (req, res) {
   let url = req.body.url;
+  if (/\/$/.test(url)) {
+    url = url.replace(/\/$/, "");
+  }
+  if (/^(https:\/\/(?!www.)|http:\/\/(?!www.))/.test(url)) {
+    url = url.replace(/^(https:\/\/|http:\/\/)/, "www.");
+  } else if (/^(https:\/\/(?=www.)|http:\/\/(?=www.))/.test(url)) {
+    url = url.replace(/^(https:\/\/www.|http:\/\/www.)/, "www.");
+  }
   dns.lookup(url, function (err, address) {
     if (err) {
       return res.json({
@@ -76,10 +84,9 @@ app.post("/api/shorturl", function (req, res) {
   });
   let newUrl = new UrlData({
     original_url: url,
-    short_url: shortId,
+    short_url: shortId
   });
-  UrlData.findOne({ original_url: newUrl.original_url })
-  .exec(function (err, data) {
+  UrlData.findOne({ original_url: newUrl.original_url }, (err, data) => {
     if (err) return console.error(err);
     if (data !== null) {
       return res.json({ original_url: data.original_url, short_url: data.short_url });
@@ -88,7 +95,7 @@ app.post("/api/shorturl", function (req, res) {
       newUrl.save();
       return res.json({ original_url: newUrl.original_url, short_url: newUrl.short_url });
     }
-  })
+  });
 });
 
 app.get("/api/shorturl/:short_code", function (req, res) {
