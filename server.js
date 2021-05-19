@@ -4,16 +4,17 @@ var mongodb = require('mongodb');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var dns = require('dns');
+var multer = require('multer');
+var upload = multer({ dest: '/uploads' });
 var app = express();
 var port = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
 var cors = require('cors');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
-
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -32,6 +33,10 @@ app.get("/header-parser", function (req, res) {
 
 app.get("/url-shortener", function (req, res) {
   res.sendFile(__dirname + '/views/url-shortener.html');
+});
+
+app.get("/file-metadata", function (req, res) {
+  res.sendFile(__dirname + '/views/file-metadata.html')
 });
 
 //Timestamp Microservice (no date_string)
@@ -128,6 +133,12 @@ app.get("/api/:date_string", function (req, res) {
       "utc": date.toUTCString()
     })
   };
+});
+
+//File Metadata Microservice
+app.post("/api/fileanalyse", upload.single("upfile"), function (req, res) {
+  var file = req.file;
+  res.json({ name: file.originalname, type: file.mimetype, size: file.size })
 });
 
 // listen for requests
