@@ -14,7 +14,7 @@ var port = process.env.PORT || 3000;
 var cors = require('cors');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -55,7 +55,7 @@ app.get("/api/whoami", function (req, res) {
     software: req.headers['user-agent']
   });
 });
-
+/*
 //Url-Shortener Microservice
 var Schema = mongoose.Schema;
 var UrlData = mongoose.model("UrlData", new Schema({
@@ -115,7 +115,7 @@ app.get("/api/shorturl/:short_code", function (req, res) {
     }
   })
 });
-
+*/
 //Timestamp Microservice (with date_string)
 app.get("/api/:date_string", function (req, res) {
   let dateString = req.params.date_string;
