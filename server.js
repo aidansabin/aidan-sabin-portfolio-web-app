@@ -163,7 +163,7 @@ app.post("/api/users/:_id/exercises", function (req, res) {
   };
   let exercise = {
     description: req.body.description,
-    duration: req.body.duration,
+    duration: Number(req.body.duration),
     date: date
   };
   Users.findByIdAndUpdate(user, { $push: { log: exercise } }, { new: true }, (err, data) => {
