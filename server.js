@@ -36,7 +36,11 @@ app.get("/url-shortener", function (req, res) {
 });
 
 app.get("/file-metadata", function (req, res) {
-  res.sendFile(__dirname + '/views/file-metadata.html')
+  res.sendFile(__dirname + '/views/file-metadata.html');
+});
+
+app.get("/exercise-tracker", function (req, res) {
+  res.sendFile(__dirname + '/views/exercise-tracker.html');
 });
 
 //Timestamp Microservice (no date_string)
@@ -114,6 +118,95 @@ app.get("/api/shorturl/:short_code", function (req, res) {
       return res.status(301).redirect("https://" + data.original_url);
     }
   })
+});
+
+//Exercise Tracker Microservice
+var Users = mongoose.model("Users", new Schema({
+  username: String,
+  count: Number,
+  log: [Schema.Types.Mixed]
+}));
+
+app.get("/api/users", function (req, res) {
+  Users.find({})
+  .select({ log: 0 })
+  .exec((err, data) => {
+    if (err) return console.error(err);
+    res.json(data);
+  });
+});
+
+app.post("/api/users", function (req, res) {
+  let user = new Users({
+    username: req.body.username,
+    count: 0,
+    log: []
+  });
+  Users.findOne({ username: user.username }, (err, data) => {
+    if (err) return console.error(err);
+    if (data !== null) {
+      return res.send("username already exists");
+    } else {
+      user.save();
+      return res.json(user);
+    }
+  })
+});
+
+app.post("/api/users/:_id/exercises", function (req, res) {
+  let user = req.params['_id'];
+  let date;
+  if (!req.body.date) {
+    date = new Date().toDateString();
+  } else {
+    date = new Date(req.body.date).toDateString();
+  };
+  let exercise = {
+    description: req.body.description,
+    duration: req.body.duration,
+    date: date
+  };
+  Users.findByIdAndUpdate(user, { $push: { log: exercise } }, { new: true }, (err, data) => {
+    if (err) return console.error(err);
+    if (data !== null) {
+      data.count++;
+      data.save();
+      return res.json(data);
+    } else {
+      return res.send("user not found");
+    }
+  });
+});
+
+app.get("/api/users/:_id/logs", function (req, res) {
+  let from = req.query.from;
+  let to = req.query.to;
+  let limit = Number(req.query.limit);
+  let user = req.params['_id'];
+  Users.findById(user, (err, data) => {
+    if (err) return console.error(err);
+    if (data !== null) {
+      let logs = data.log;
+      let sorted = logs.sort((a,b) => new Date(b.date) - new Date(a.date));
+      if (from !== undefined) {
+        sorted = sorted.filter(val => new Date(val.date).getTime() > new Date(from).getTime());
+      }
+      if (to !== undefined) {
+        sorted = sorted.filter(val => new Date(val.date).getTime() < new Date(to).getTime());
+      }
+      if (!isNaN(limit)) {
+        sorted = sorted.filter((val, index) => index < limit);
+      }
+      return res.json({
+        _id: data['_id'],
+        username: data.username,
+        count: data.count,
+        log: sorted
+      });
+    } else {
+      return res.send("user not found");
+    }
+  });
 });
 
 //Timestamp Microservice (with date_string)
