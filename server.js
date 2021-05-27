@@ -64,18 +64,11 @@ app.get("/api/whoami", function (req, res) {
 var Schema = mongoose.Schema;
 var UrlData = mongoose.model("UrlData", new Schema({
   original_url: String,
-  short_url: String
+  short_url: Number
 }));
 
-var shortId;
-UrlData.countDocuments({}, function (err, num) {
-  if (err) return console.error(err);
-  shortId = num + 1;
-  return shortId;
-});
-
 app.use(bodyParser.urlencoded());
-app.post("/api/shorturl", function (req, res) {
+app.post("/api/shorturl", async function (req, res) {
   let url = req.body.url;
   if (/\/$/.test(url)) {
     url = url.replace(/\/$/, "");
@@ -92,25 +85,30 @@ app.post("/api/shorturl", function (req, res) {
       });
     }
   });
-  let newUrl = new UrlData({
-    original_url: url,
-    short_url: shortId
-  });
-  UrlData.findOne({ original_url: newUrl.original_url }, (err, data) => {
+  var shortUrl = 1;
+  await UrlData.find({}).countDocuments({}, (err, count) => {
+    if (err) return console.error(err);
+    shortUrl = shortUrl + count;
+    return shortUrl;
+  })
+  UrlData.findOne({ original_url: url }, (err, data) => {
     if (err) return console.error(err);
     if (data !== null) {
       return res.json({ original_url: data.original_url, short_url: data.short_url });
     } else {
-      shortId++;
+      let newUrl = new UrlData({
+        original_url: url,
+        short_url: shortUrl
+      });
       newUrl.save();
       return res.json({ original_url: newUrl.original_url, short_url: newUrl.short_url });
     }
-  });
+  })
 });
 
 app.get("/api/shorturl/:short_code", function (req, res) {
-  let shortUrl = req.params.short_code;
-  UrlData.findOne({ short_url: shortUrl }, function (err, data) {
+  let shortCode = req.params.short_code;
+  UrlData.findOne({ short_url: shortCode }, function (err, data) {
     if (err) return console.error(err);
     if (data.original_url.match(/http/ig)) {
       return res.status(301).redirect(data.original_url);
