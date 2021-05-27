@@ -7,12 +7,12 @@ var dns = require('dns');
 var multer = require('multer');
 //var upload = multer({ dest: '/uploads' });
 var app = express();
-var port = process.env.PORT;
+var port = process.env.PORT || 3000;
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
 var cors = require('cors');
-app.use(cors({origin: 'https://www.freecodecamp.org', optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
+app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
