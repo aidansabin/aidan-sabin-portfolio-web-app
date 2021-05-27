@@ -171,7 +171,7 @@ app.post("/api/users/:_id/exercises", function (req, res) {
     if (data !== null) {
       data.count++;
       data.save();
-      return res.json(data);
+      return res.json({ _id: data['_id'], username: data.username, exercise});
     } else {
       return res.send("user not found");
     }
