@@ -12,12 +12,17 @@ var port = process.env.PORT || 3000;
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
 var cors = require('cors');
-app.use(cors({origin: "https://www.freecodecamp.org", credentials: true, optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
+app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
+app.use(function (req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+})
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
