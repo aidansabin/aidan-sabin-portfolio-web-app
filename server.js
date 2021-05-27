@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var dns = require('dns');
 var multer = require('multer');
-var upload = multer({ dest: '/uploads' });
+//var upload = multer({ dest: '/uploads' });
 var app = express();
 var port = process.env.PORT || 3000;
 
@@ -227,13 +227,13 @@ app.get("/api/:date_string", function (req, res) {
     })
   };
 });
-
+/*
 //File Metadata Microservice
 app.post("/api/fileanalyse", upload.single("upfile"), function (req, res) {
   var file = req.file;
   res.json({ name: file.originalname, type: file.mimetype, size: file.size })
 });
-
+*/
 // listen for requests
 var listener = app.listen(port, function () {
   console.log('Your app is listening on port ' + listener.address().port);
