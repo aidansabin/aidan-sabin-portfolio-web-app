@@ -108,7 +108,7 @@ app.post("/url-shortener/api/shorturl", async function (req, res) {
   })
 });
 
-app.get("/api/shorturl/:short_code", function (req, res) {
+app.get("/url-shortener/api/shorturl/:short_code", function (req, res) {
   let shortCode = req.params.short_code;
   UrlData.findOne({ short_url: shortCode }, function (err, data) {
     if (err) return console.error(err);
@@ -117,7 +117,7 @@ app.get("/api/shorturl/:short_code", function (req, res) {
     } else {
       return res.status(301).redirect("https://" + data.original_url);
     }
-  })
+  });
 });
 
 //Exercise Tracker Microservice
