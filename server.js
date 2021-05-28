@@ -64,7 +64,7 @@ app.get("/api/whoami", function (req, res) {
 var Schema = mongoose.Schema;
 var UrlData = mongoose.model("UrlData", new Schema({
   original_url: String,
-  short_url: Number
+  short_url: String
 }));
 
 app.use(bodyParser.urlencoded({
