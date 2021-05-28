@@ -71,8 +71,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.post("/url-shortener/api/shorturl", async function (req, res) {
-  let url = req.body.url;
+app.post("/api/shorturl", async function (req, res) {
+  let url = new URL(req.body.url);
   /*if (/\/$/.test(url)) {
     url = url.replace(/\/$/, "");
   }
