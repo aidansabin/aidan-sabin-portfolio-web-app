@@ -13,7 +13,7 @@ var port = process.env.PORT || 3000;
 var corsOptions = {
   origin: 'https://www.freecodecamp.org',
   optionsSuccessStatus: 200
-}
+};
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.header(
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
 
-app.use(cors(corsOptions);  // some legacy browsers choke on 204
+app.use(cors(corsOptions));  // some legacy browsers choke on 204
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
