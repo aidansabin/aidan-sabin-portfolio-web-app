@@ -112,6 +112,9 @@ app.get("/url-shortener/api/shorturl/:short_code", function (req, res) {
   let shortCode = req.params.short_code;
   UrlData.findOne({ short_url: shortCode }, function (err, data) {
     if (err) return console.error(err);
+    if (data === undefined) {
+      return res.send("invalid short url");
+    }
     if (data.original_url.match(/http/ig)) {
       return res.status(301).redirect(data.original_url);
     } else {
