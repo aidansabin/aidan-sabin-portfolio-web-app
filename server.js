@@ -81,7 +81,7 @@ app.post("/api/shorturl", async function (req, res) {
   } else if (/^(https:\/\/(?=www.)|http:\/\/(?=www.))/.test(url)) {
     url = url.replace(/^(https:\/\/www.|http:\/\/www.)/, "www.");
   }
-  dns.lookup(url, function (err, address) {
+  dns.lookup(url.replace(/^www./, ""), function (err, address) {
     if (err) {
       return res.json({
         error: "invalid url"
