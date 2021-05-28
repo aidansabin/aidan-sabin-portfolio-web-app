@@ -73,15 +73,15 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.post("/url-shortener/api/shorturl", async function (req, res) {
   let url = req.body.url;
-  if (/\/$/.test(url)) {
+  /*if (/\/$/.test(url)) {
     url = url.replace(/\/$/, "");
   }
   if (/^(https:\/\/(?!www.)|http:\/\/(?!www.))/.test(url)) {
     url = url.replace(/^(https:\/\/|http:\/\/)/, "www.");
   } else if (/^(https:\/\/(?=www.)|http:\/\/(?=www.))/.test(url)) {
     url = url.replace(/^(https:\/\/www.|http:\/\/www.)/, "www.");
-  }
-  dns.lookup(url.replace(/^www./, ""), function (err, address) {
+  }*/
+  dns.lookup(url, function (err, address) {
     if (err) {
       return res.json({
         error: "invalid url"
