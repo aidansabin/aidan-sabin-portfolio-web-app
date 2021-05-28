@@ -67,7 +67,7 @@ var UrlData = mongoose.model("UrlData", new Schema({
   short_url: Number
 }));
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 app.post("/api/shorturl", async function (req, res) {
   let url = req.body.url;
   if (/\/$/.test(url)) {
