@@ -8,7 +8,7 @@ var multer = require('multer');
 //var upload = multer({ dest: '/uploads' });
 var cors = require('cors');
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 
 var corsOptions = {
   origin: 'https://www.freecodecamp.org',
