@@ -7,7 +7,7 @@ var dns = require('dns');
 var multer = require('multer');
 //var upload = multer({ dest: '/uploads' });
 var app = express();
-var port = process.env.PORT;
+var port = process.env.PORT || 3000;
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
@@ -67,6 +67,9 @@ var UrlData = mongoose.model("UrlData", new Schema({
   short_url: Number
 }));
 
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 app.post("/api/shorturl", async function (req, res) {
   let url = req.body.url;
