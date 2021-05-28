@@ -6,9 +6,14 @@ var bodyParser = require('body-parser');
 var dns = require('dns');
 var multer = require('multer');
 //var upload = multer({ dest: '/uploads' });
+var cors = require('cors');
 var app = express();
 var port = process.env.PORT || 3000;
 
+var corsOptions = {
+  origin: 'https://www.freecodecamp.org',
+  optionsSuccessStatus: 200
+}
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.header(
@@ -20,8 +25,8 @@ app.use((req, res, next) => {
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
-var cors = require('cors');
-app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
+
+app.use(cors(corsOptions);  // some legacy browsers choke on 204
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -77,7 +82,7 @@ var UrlData = mongoose.model("UrlData", new Schema({
 }));
 
 app.use(bodyParser.urlencoded());
-app.post("/api/shorturl", async function (req, res) {
+app.post("/api/shorturl", cors(corsOptions), async function (req, res) {
   let url = req.body.url;
   if (/\/$/.test(url)) {
     url = url.replace(/\/$/, "");
