@@ -16,7 +16,8 @@
 		"express": "^4.15.2",
 		"mongodb": "^3.6.6",
 		"mongoose": "^5.12.7",
-		"multer": "^1.4.2"
+		"multer": "^1.4.2",
+		"valid-url": "^1.0.9"
 	},
 	"devDependencies": {
 		"got": "^11.3.0",

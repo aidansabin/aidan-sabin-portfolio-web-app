@@ -4,6 +4,7 @@ var mongodb = require('mongodb');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var dns = require('dns');
+var validUrl = require('valid-url');
 var multer = require('multer');
 //var upload = multer({ dest: '/uploads' });
 var app = express();
@@ -72,23 +73,13 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.post("/api/shorturl", async function (req, res) {
-  let rawUrl = req.body.url;
-  let url = rawUrl;
-  let dnsUrl;
-  if (/^https:\/\/(?!www.)|http:\/\/(?!www.)/.test(rawUrl)) {
-    dnsUrl = new URL(rawUrl);
-  } else if (/^(https:\/\/(?=www.)|http:\/\/(?=www.))/.test(rawUrl)) {
-    rawUrl = rawUrl.replace(/www./, "");
-    dnsUrl = new URL(rawUrl);
-  } else if (/^www./.test(rawUrl)) {
-    rawUrl = rawUrl.replace(/www./, "https://");
-    dnsUrl = new URL(rawUrl);
-  }
-  await dns.lookup(dnsUrl.hostname, function (err, address) {
+  let url = req.body.url;
+  if (!validUrl.isUri(url) {
+    return res.json({ error: "invalid url" });
+  })
+  await dns.lookup(url.hostname, function (err, address) {
     if (err) {
-      return res.json({
-        error: "invalid url"
-      });
+      return res.json({ error: "invalid url" });
     }
   });
   var shortUrl = 1;
