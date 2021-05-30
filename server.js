@@ -80,8 +80,10 @@ app.post("/api/shorturl", async function (req, res) {
   };
   if (!validUrl.isUri(url)) {
     return res.json({ error: 'invalid url' });
+  } else {
+    url = new URL(url);
   }
-  await dns.lookup(url, function (err, address) {
+  await dns.lookup(url.hostname, function (err, address) {
     if (err) {
       return res.json({ error: 'invalid url' });
     }
