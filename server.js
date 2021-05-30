@@ -73,17 +73,18 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.post("/api/shorturl", async function (req, res) {
   let rawUrl = req.body.url;
-  let url;
+  let url = rawUrl;
+  let dnsUrl;
   if (/^https:\/\/(?!www.)|http:\/\/(?!www.)/.test(rawUrl)) {
-    url = new URL(rawUrl);
+    dnsUrl = new URL(rawUrl);
   } else if (/^(https:\/\/(?=www.)|http:\/\/(?=www.))/.test(rawUrl)) {
     rawUrl = rawUrl.replace(/www./, "");
-    url = new URL(rawUrl);
+    dnsUrl = new URL(rawUrl);
   } else if (/^www./.test(rawUrl)) {
     rawUrl = rawUrl.replace(/www./, "https://");
-    url = new URL(rawUrl);
+    dnsUrl = new URL(rawUrl);
   }
-  await dns.lookup(url.hostname, function (err, address) {
+  await dns.lookup(dnsUrl.hostname, function (err, address) {
     if (err) {
       return res.json({
         error: "invalid url"
