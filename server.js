@@ -74,9 +74,11 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.post("/api/shorturl", async function (req, res) {
   let url = req.body.url;
-  if (!validUrl.isUri(url) {
+  if (!validUrl.isUri(url)) {
     return res.json({ error: "invalid url" });
-  })
+  } else {
+    url = new URL(url);
+  }
   await dns.lookup(url.hostname, function (err, address) {
     if (err) {
       return res.json({ error: "invalid url" });
