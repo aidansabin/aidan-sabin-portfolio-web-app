@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var dns = require('dns');
 var validUrl = require('valid-url');
 var multer = require('multer');
-//var upload = multer({ dest: '/uploads' });
+var upload = multer({ dest: '/uploads' });
 var app = express();
 var port = process.env.PORT || 3000;
 
