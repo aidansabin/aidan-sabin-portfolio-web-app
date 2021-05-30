@@ -72,16 +72,19 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.post("/api/shorturl", async function (req, res) {
-  let url = new URL(req.body.url);
-  /*if (/\/$/.test(url)) {
-    url = url.replace(/\/$/, "");
+  //format needs to be https://website.com
+  let rawUrl = req.body.url;
+  let url;
+  if (/^https:\/\/(?!www.)|http:\/\/(?!www.)/.test(rawUrl)) {
+    url = new URL(rawUrl);
+  } else if (/^(https:\/\/(?=www.)|http:\/\/(?=www.))/.test(rawUrl)) {
+    rawUrl = rawUrl.replace(/www./, "");
+    url = new URL(rawUrl);
+  } else if (/^www./.test(rawUrl)) {
+    rawUrl = rawUrl.replace(/www./, "https://");
+    url = new URL(rawUrl);
   }
-  if (/^(https:\/\/(?!www.)|http:\/\/(?!www.))/.test(url)) {
-    url = url.replace(/^(https:\/\/|http:\/\/)/, "www.");
-  } else if (/^(https:\/\/(?=www.)|http:\/\/(?=www.))/.test(url)) {
-    url = url.replace(/^(https:\/\/www.|http:\/\/www.)/, "www.");
-  }*/
-  dns.lookup(url, function (err, address) {
+  await dns.lookup(url.hostname, function (err, address) {
     if (err) {
       return res.json({
         error: "invalid url"
