@@ -74,6 +74,10 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.post("/api/shorturl", async function (req, res) {
   let url = req.body.url;
+  const httpRegex = /^(http|https)(:\/\/)/;
+  if (!httpRegex.test(url)) {
+    return res.json({ error: 'invalid url' });
+  };
   if (!validUrl.isUri(url)) {
     return res.json({ error: 'invalid url' });
   } else {
