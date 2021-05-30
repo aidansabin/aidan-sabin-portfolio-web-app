@@ -231,7 +231,7 @@ app.get("/api/:date_string", function (req, res) {
 });
 
 //File Metadata Microservice
-app.post("/api/fileanalyse", upload.single("upfile"), function (req, res) {
+app.post("/file-metadata/api/fileanalyse", upload.single("upfile"), function (req, res) {
   var file = req.file;
   res.json({ name: file.originalname, type: file.mimetype, size: file.size })
 });
