@@ -228,13 +228,13 @@ app.get("/api/:date_string", function (req, res) {
     })
   };
 });
-/*
+
 //File Metadata Microservice
 app.post("/api/fileanalyse", upload.single("upfile"), function (req, res) {
   var file = req.file;
   res.json({ name: file.originalname, type: file.mimetype, size: file.size })
 });
-*/
+
 // listen for requests
 var listener = app.listen(port, function () {
   console.log('Your app is listening on port ' + listener.address().port);
