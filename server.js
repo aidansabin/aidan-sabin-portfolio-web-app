@@ -72,7 +72,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.post("/api/shorturl", async function (req, res) {
-  //format needs to be https://website.com
   let rawUrl = req.body.url;
   let url;
   if (/^https:\/\/(?!www.)|http:\/\/(?!www.)/.test(rawUrl)) {
@@ -117,11 +116,8 @@ app.get("/url-shortener/api/shorturl/:short_code", function (req, res) {
     if (err) return console.error(err);
     if (data === undefined || typeof(data) !== Number) {
       return res.send("invalid short url");
-    }
-    if (data.original_url.match(/http/ig)) {
-      return res.status(301).redirect(data.original_url);
     } else {
-      return res.status(301).redirect("https://" + data.original_url);
+      return res.status(301).redirect(data.original_url);
     }
   });
 });
