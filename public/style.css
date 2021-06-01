@@ -1,12 +1,25 @@
 /****** Main Styling ******/
 
+:root {
+	--pink: #F2BC94;
+	--yellow: #F4AF1B;
+	--blue: #00154F;
+}
+
 body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
-	color: #222;
-	background-color: #FaFaFa;
+	color: var(--blue);
+	background-color: var(--pink);
 	text-align: center;
 	line-height: 1.4em;
+	width: 100vw;
+	height: 100vh !important;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	overflow-anchor: none;
+	max-height: 100%;
+	max-width: 100%;
 }
 
 .container {
@@ -39,8 +52,54 @@ ul {
 
 li {
   margin-bottom: 0.5em;
+	padding-top: 1em;
 }
 
-a {
-	color: #2574A9;
+i {
+	margin: 0 auto;
+	padding-top: 30px;
+	color: var(--pink);
+}
+
+.title {
+	color: var(--blue);
+}
+
+.list {
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+}
+
+.link-set {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.link-container {
+	margin-bottom: 0.5em;
+	height: 40vh;
+	width: 25vw;
+	border: black solid 2px;
+	background-color: var(--blue);
+	box-shadow: 1em 1em 1em black;
+}
+
+.links {
+	color: var(--pink);
+	display: block;
+	font-size: 1.25rem;
+}
+
+.time-example {
+	text-align: left;
+	margin-left: 40vw;
+}
+
+.time-ex-a {
+	color: var(--blue);
+}
+
+.signature {
+	color: var(--blue);
 }
